@@ -1,93 +1,42 @@
 const CANVAS_WIDTH = 600;
 const CANVAS_HEIGHT = 600;
-
 let bg;
-
-
-let spritesheet;
-let spritedata;
-
-let flyspritesheet;
-let flyspritedata;
-
-let tenspritesheet;
-let tenspirtedata;
-
-let animation = [];
-
-
-let ufos = [];
-let flys = [];
-let tens = [];
+let ship;
+let shipAnim;
+let fly;
+let ufo; 
+let tentacle;
 
 
 function preload() {
-  const shipSpritesheet = loadSpriteSheet("alien/SpaceShip.png", 32, 32, 12);
+  const shipSpritesheet = loadSpriteSheet("img/SpaceShip.png", 32, 32, 12);
   shipAnim = loadAnimation(shipSpritesheet);
   ship = createSprite(CANVAS_WIDTH / 2, CANVAS_HEIGHT- 50, 32, 32);
   ship.moveSpeed = 5;
   ship.scale = (2.0)
+
+  const AlienSpritesheet = loadSpriteSheet("img/Aliens Fly.png", 64, 64, 2);
+  fly = loadAnimation(AlienSpritesheet)
   
-  spritedata = loadJSON('alien/ufo.json');
-  spritesheet = loadImage('alien/Aliens clone copy.png');
 
-  flyspritedata = loadJSON('alien/fly.json');
-  flyspritesheet = loadImage('alien/Aliens Fly.png');
+  const UfoSpritesheet = loadSpriteSheet("img/Aliens clone.png", 64, 64, 5);
+  ufo = loadAnimation(UfoSpritesheet)
 
-  tenspritedata = loadJSON('alien/tentacle.json');
-  tenspritesheet = loadImage('alien/Tentacle.png');
+  const tenSpritesheet = loadSpriteSheet("img/Tentacle.png", 128, 128, 5);
+  tentacle = loadAnimation(tenSpritesheet)
 
+  bg = loadImage('img/space.jpg')
+  
 
-
-  bg = loadImage('alien/space.jpg');
 }
 
 function setup() {
   createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-  createCanvas(CANVAS_WIDTH, CANVAS_HEIGHT);
-
   ship.addAnimation("move", shipAnim);
-  ship.addImage("still", loadImage("alien/ship_still.png"));
+  ship.addImage("still", loadImage("img/ship_still.png"));
   ship.setDefaultCollider();
-
-  let frames = spritedata.frames;
-  for (let i = 0; i < frames.length; i++) {
-    let pos = frames[i].position;
-    let img = spritesheet.get(pos.x, pos.y, pos.w, pos.h);
-    animation.push(img);
-    console.log(animation)
-  }
-
-  for (let i = 0; i < 3; i++) {
-    ufos[i] = new Sprite(animation, 0, i * 75, 0.1, 0.4);
-  }
-
-
-  let flyframes = flyspritedata.frames;
-  for (let i = 0; i < flyframes.length; i++) {
-    let pos = flyframes[i].position;
-    let img2 = flyspritesheet.get(pos.x, pos.y, pos.w, pos.h);
-    animation.push(img2);
-  }
-
-  fly = new Sprite(animation, 200, 300, 0.3, 1);
-  
-
-  let tenframes = tenspritedata.frames;
-  for (let i = 0; i < frames.length; i++) {
-    let pos = frames[i].position;
-    let img = tenspritesheet.get(pos.x, pos.y, pos.w, pos.h);
-    animation.push(img);
-    
-  }
-
-  
-  ten = new Sprite(animation, 300, 200, 0.2, 0.4);
-  
   
 }
-
-
 
 function update(object) {
   if (keyDown("up") || keyDown("down") || keyDown("left") || keyDown("right")) {
@@ -121,27 +70,11 @@ function drawObject(object) {
   drawSprite(object);
 }
 
-
 function draw() {
   background(bg);
-  
   update(ship);
-
-  for (let ufo of ufos) {
-    ufo.show();
-    ufo.animate();
-  }
-
-  
-  ten.show();
-  ten.animate();
-  
-
-  
-
-  fly.show();
-  fly.animate();
-  
-
+  animation(fly, 300, 100);
+  animation(ufo, 400,250);
+  animation(tentacle, 150,300)
 
 }
